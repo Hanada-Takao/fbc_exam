@@ -5,8 +5,11 @@ class BlogsController < ApplicationController
   end
 
   def new
-    # 追記する
-    @blog = Blog.new
+    if params[:back]
+      @blog = Blog.new(blog_params)
+    else
+      @blog = Blog.new
+    end
   end
 
   def create
@@ -15,7 +18,7 @@ class BlogsController < ApplicationController
       render :new
     else
       if @blog.save
-        redirect_to blogs_path, notice: "ブログを作成しました！"
+        redirect_to blogs_path, notice: "投稿を作成しました！"
       else
         render :new
       end
@@ -31,7 +34,7 @@ class BlogsController < ApplicationController
 
   def update
     if @blog.update(blog_params)
-      redirect_to blogs_path, notice: "ブログを編集しました！"
+      redirect_to blogs_path, notice: "投稿を編集しました！"
     else
       render :edit
     end
@@ -39,19 +42,19 @@ class BlogsController < ApplicationController
 
   def destroy
     @blog.destroy
-    redirect_to blogs_path, notice:"ブログを削除しました！"
+    redirect_to blogs_path, notice:"投稿を削除しました！"
   end
 
   def confirm
+    @blog = Blog.new(blog_params)
     @blog = current_user.blogs.build(blog_params)
     render :new if @blog.invalid?
   end
 
   private
   def blog_params
-    params.require(:blog).permit(:title, :content, :user_id)
+    params.require(:blog).permit(:title, :content, :user_id, :image, :image_cache)
   end
-  # idをキーとして値を取得するメソッドを追加
   def set_blog
     @blog = Blog.find(params[:id])
   end
