@@ -15,7 +15,6 @@
 # gem 'pg'
 #
 default: &default
-  adapter: postgresql
   encoding: unicode
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
@@ -23,6 +22,7 @@ default: &default
 
 development:
   <<: *default
+  adapter: postgresql
   database: fbc_app_development
 
   # The specified database role being used to connect to postgres.
